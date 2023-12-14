@@ -8,39 +8,47 @@ $router = new \App\Service\Router();
 
 $action = $_REQUEST['action'] ?? null;
 switch ($action) {
-    case 'post-index':
+    case 'lesson-index':
     case null:
-        $controller = new \App\Controller\PostController();
+        $controller = new \App\Controller\LessonController();
         $view = $controller->indexAction($templating, $router);
         break;
-    case 'post-create':
-        $controller = new \App\Controller\PostController();
-        $view = $controller->createAction($_REQUEST['post'] ?? null, $templating, $router);
+    case 'lesson-create':
+        $controller = new \App\Controller\LessonController();
+        $view = $controller->createAction($_REQUEST['lesson'] ?? null, $templating, $router);
         break;
-    case 'post-edit':
-        if (! $_REQUEST['id']) {
+    case 'lesson-edit':
+        $lessonId = $_REQUEST['id'] ?? null;
+        if (! $lessonId) {
             break;
         }
-        $controller = new \App\Controller\PostController();
-        $view = $controller->editAction($_REQUEST['id'], $_REQUEST['post'] ?? null, $templating, $router);
+        $controller = new \App\Controller\LessonController();
+        $view = $controller->editAction($lessonId, $_REQUEST['lesson'] ?? null, $templating, $router);
         break;
-    case 'post-show':
-        if (! $_REQUEST['id']) {
+    case 'lesson-show':
+        $lessonId = $_REQUEST['id'] ?? null;
+        if (! $lessonId) {
             break;
         }
-        $controller = new \App\Controller\PostController();
-        $view = $controller->showAction($_REQUEST['id'], $templating, $router);
+        $controller = new \App\Controller\LessonController();
+        $view = $controller->showAction($lessonId, $templating, $router);
         break;
-    case 'post-delete':
-        if (! $_REQUEST['id']) {
+    case 'lesson-delete':
+        $lessonId = $_REQUEST['id'] ?? null;
+        if (! $lessonId) {
             break;
         }
-        $controller = new \App\Controller\PostController();
-        $view = $controller->deleteAction($_REQUEST['id'], $router);
+        $controller = new \App\Controller\LessonController();
+        $view = $controller->deleteAction($lessonId, $router);
         break;
-    case 'info':
-        $controller = new \App\Controller\InfoController();
-        $view = $controller->infoAction();
+    case 'admin-index':
+        $controller = new \App\Controller\AdminController();
+        $view = $controller->indexAction($templating, $router);
+        break;
+
+    case 'admin-validate':
+        $controller = new \App\Controller\AdminController();
+        $view = $controller->validateAction($templating, $router);
         break;
     default:
         $view = 'Not found';

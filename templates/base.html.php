@@ -1,12 +1,24 @@
-<!doctype html>
+<?php
+
+// Pobierz akcję z adresu URL
+$action = $_GET['action'] ?? '';
+
+// Jeśli akcja to "admin", kontynuuj renderowanie strony
+
+// Reszta kodu w pliku base.html.php
+
+/** @var string $title */
+/** @var string $bodyClass */
+/** @var string $main */
+
+?>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?= $title ?></title>
     <link rel="stylesheet" href="/assets/dist/style.min.css">
-    <title><?= $title ?? 'Custom Framework' ?></title>
 </head>
 <body <?= isset($bodyClass) ? "class='$bodyClass'" : '' ?>>
 <nav><?php require(__DIR__ . DIRECTORY_SEPARATOR . 'nav.html.php') ?></nav>
