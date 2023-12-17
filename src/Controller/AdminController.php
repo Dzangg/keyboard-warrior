@@ -31,6 +31,15 @@ class AdminController
         }
     }
 
+    public function logoutAction(Templating $templating, Router $router): void
+    {
+        // admin logout, delete cookie
+        $expiration = time() - 3600;
+        setcookie('is_logged', '', $expiration, '/');
+        $path = $router->generatePath('admin-login');
+        $router->redirect($path);
+    }
+
 
     public function validateAction(Templating $templating, Router $router): ?string
     {

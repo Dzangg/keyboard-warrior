@@ -17,6 +17,7 @@ ob_start();  ?>
         <label for="password">Password</label>
         <input type="password" id="password" name="password" value="<?= $_POST['password'] ?? '' ?>" required>
     </div>
+
     <?php if ($error) : ?>
         <div class="error-message">
             <?= $error ?>

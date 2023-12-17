@@ -1,20 +1,8 @@
-# Custom PHP Framework
+# Done - 1 kamień milowy
+### - obsługa LocalStorage użytkownika
+### - zrobić odniesienia do stron w zależności od uprawnień
+### - podstawowe działanie strony (strona widoczna od strony użytkownika np. wchodzisz w localhost:00000 i ją widzisz)
 
-This framework was created to help you look for features that you need to
-create your own custom framework. **DO NOT use it for production**.
-Use Symfony Framework or Laravel instead.
-
-## Features
-
-- Front controller
-- ORM
-- Autoloading
-- MVC architecture
-
-## Usage
-
-1. Copy `config/config.dist.php` to `config/config.php` and update your settings.
-2. Compile LESS styles into minified CSS: 
-```
-lessc $ProjectFileDir$\public\assets\src\less\style.less $ProjectFileDir$\public\assets\dist\style.min.css --clean-css --source-map
-```
+# ToDo - 1 kamień milowy
+### - stylistyka w less
+### - marge całego działania projektu, połączenie local storage z całym php

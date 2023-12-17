@@ -46,6 +46,11 @@ switch ($action) {
         $view = $controller->loginAction($templating, $router);
         break;
 
+    case 'admin-logout':
+        $controller = new \App\Controller\AdminController();
+        $controller->logoutAction($templating, $router);
+        break;
+
     case 'admin-validate':
         $controller = new \App\Controller\AdminController();
         $view = $controller->validateAction($templating, $router);
@@ -56,12 +61,13 @@ switch ($action) {
         $view = $controller->panelAction($templating, $router);
         break;
 
-
     default:
         $view = 'Not found';
         break;
 }
-
 if ($view) {
     echo $view;
 }
+
+
+
