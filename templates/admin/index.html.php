@@ -3,11 +3,10 @@
 /** @var \App\Model\Lesson[] $lessons */
 /** @var \App\Service\Router $router */
 
-$title = 'Lesson List';
-$bodyClass = 'index';
+$title = 'Admin lesson panel';
 
 ob_start(); ?>
-    <h1>Lessons List</h1>
+    <h1>Admin lesson panel</h1>
 
     <a href="<?= $router->generatePath('lesson-create') ?>">Create new</a>
 
@@ -17,10 +16,10 @@ ob_start(); ?>
                 <h3>Title: <?= $lesson->getTitle() ?></h3>
                 <p>Difficulty: <?= $lesson->getDifficulty() ?></p>
 
-<!--                <ul class="action-list">-->
-<!--                    <li><a href="--><?php //= $router->generatePath('lesson-show', ['id' => $lesson->getId()]) ?><!--">Details</a></li>-->
-<!--                    <li><a href="--><?php //= $router->generatePath('lesson-edit', ['id' => $lesson->getId()]) ?><!--">Edit</a></li>-->
-<!--                </ul>-->
+                <ul class="action-list">
+                    <li><a href="<?= $router->generatePath('lesson-show', ['id' => $lesson->getId()]) ?>">Details</a></li>
+                    <li><a href="<?= $router->generatePath('lesson-edit', ['id' => $lesson->getId()]) ?>">Edit</a></li>
+                </ul>
             </li>
         <?php endforeach; ?>
     </ul>

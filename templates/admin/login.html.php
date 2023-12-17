@@ -1,6 +1,9 @@
 <?php
-/** @var \App\Model\Admin $admin */
+///** @var \App\Model\Admin $admin */
 /** @var \App\Service\Router $router */
+/** @var string $error */
+
+$title = 'Admin panel';
 
 ob_start();  ?>
 
@@ -14,7 +17,11 @@ ob_start();  ?>
         <label for="password">Password</label>
         <input type="password" id="password" name="password" value="<?= $_POST['password'] ?? '' ?>" required>
     </div>
-
+    <?php if ($error) : ?>
+        <div class="error-message">
+            <?= $error ?>
+        </div>
+    <?php endif; ?>
 
     <div class="form-group">
         <input type="submit" value="Log in">

@@ -9,21 +9,23 @@ use App\Service\Templating;
 
 class AdminController
 {
-    public function indexAction(Templating $templating, Router $router): ?string
+    public function loginAction(Templating $templating, Router $router): ?string
     {
         $isLogged = $this->isUserLoggedIn();
 
         if ($isLogged) {
             // Przekieruj na stronę admina lub wygeneruj odpowiednią treść
             $lessons = Lesson::findAll();
-            $html = $templating->render('lesson/index.html.php', [
+            $html = $templating->render('admin/index.html.php', [
                 'lessons' => $lessons,
                 'router' => $router,
             ]);
             return $html;
         } else {
+            $error = '';
             $html = $templating->render('admin/login.html.php', [
-                'router' => $router
+                'router' => $router,
+                'error' => $error,
             ]);
             return $html;
         }
@@ -37,12 +39,11 @@ class AdminController
 
         if ($this->authenticate($username, $password)) {
             // Jeśli uwierzytelnienie powiodło się, ustaw flagę zalogowanego użytkownika
-//            $_SESSION['is_logged'] = true;
             $expiration = time() + (86400 * 30); // Przykładowe ustawienie ważności ciasteczka (tutaj 30 dni)
             setcookie('is_logged', 'true', $expiration, '/', '', false, true); // Ustawienie ciasteczka
 
             // Przekieruj na stronę admina lub wygeneruj odpowiednią treść
-            $path = $router->generatePath('lesson-index');
+            $path = $router->generatePath('admin-panel');
             $router->redirect($path);
             return null;
         } else {
@@ -57,6 +58,24 @@ class AdminController
 
     }
 
+
+    public function panelAction(Templating $templating, Router $router): ?string
+    {
+        $isLogged = $this->isUserLoggedIn();
+        if ($isLogged) {
+            $lessons = Lesson::findAll();
+            $html = $templating->render('admin/index.html.php', [
+                'router' => $router,
+                'lessons' => $lessons,
+            ]);
+            return $html;
+        } else {
+            $path = $router->generatePath('admin-login');
+            $router->redirect($path);
+            return null;
+        }
+    }
+
     private function isUserLoggedIn(): bool
     {
         return isset($_COOKIE['is_logged']) && $_COOKIE['is_logged'] === 'true';
@@ -64,9 +83,8 @@ class AdminController
 
     private function authenticate(string $username, string $password): bool
     {
-        var_dump($username, $password);
         // Tutaj dodaj logikę uwierzytelniania, np. porównanie z danymi z bazy danych
         // Zwróć true, jeśli uwierzytelnienie powiedzie się, a false w przeciwnym razie
-        return true; // Na potrzeby przykładu zawsze zwracamy true
+        return Admin::validateAdmin($username, $password);
     }
 }

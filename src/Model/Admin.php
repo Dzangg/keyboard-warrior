@@ -64,21 +64,21 @@ class Admin
     }
 
 
-    public static function findAll(): array
-    {
-        $pdo = new \PDO(Config::get('db_dsn'), Config::get('db_user'), Config::get('db_pass'));
-        $sql = 'SELECT * FROM admin';
-        $statement = $pdo->prepare($sql);
-        $statement->execute();
-
-        $admins = [];
-        $adminsArray = $statement->fetchAll(\PDO::FETCH_ASSOC);
-        foreach ($adminsArray as $adminArray) {
-            $admins[] = self::fromArray($adminArray);
-        }
-
-        return $admins;
-    }
+//    public static function findAll(): array
+//    {
+//        $pdo = new \PDO(Config::get('db_dsn'), Config::get('db_user'), Config::get('db_pass'));
+//        $sql = 'SELECT * FROM admin';
+//        $statement = $pdo->prepare($sql);
+//        $statement->execute();
+//
+//        $admins = [];
+//        $adminsArray = $statement->fetchAll(\PDO::FETCH_ASSOC);
+//        foreach ($adminsArray as $adminArray) {
+//            $admins[] = self::fromArray($adminArray);
+//        }
+//
+//        return $admins;
+//    }
 
     public static function validateAdmin($username, $password): string
     {

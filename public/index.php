@@ -41,15 +41,22 @@ switch ($action) {
         $controller = new \App\Controller\LessonController();
         $view = $controller->deleteAction($lessonId, $router);
         break;
-    case 'admin-index':
+    case 'admin-login':
         $controller = new \App\Controller\AdminController();
-        $view = $controller->indexAction($templating, $router);
+        $view = $controller->loginAction($templating, $router);
         break;
 
     case 'admin-validate':
         $controller = new \App\Controller\AdminController();
         $view = $controller->validateAction($templating, $router);
         break;
+
+    case 'admin-panel':
+        $controller = new \App\Controller\AdminController();
+        $view = $controller->panelAction($templating, $router);
+        break;
+
+
     default:
         $view = 'Not found';
         break;
