@@ -1,7 +1,35 @@
 .index {
   ul.index-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    background-color: #ffa650;
+
     li {
-      margin-bottom: 2em;
+      width: calc(33.3333% - 20px);
+      margin-bottom: 20px;
+      background-color: @tileBackground;
+      border: 2px solid #e1e1e1;
+      border-radius: 8px;
+      overflow: hidden;
+      text-align: center;
+      transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+      cursor: pointer;
+
+      &:hover {
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      }
+
+      h3 {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin: 10px;
+      }
+
+      p {
+        font-size: 1rem;
+        margin: 0 10px 10px 10px;
+      }
     }
   }
 }

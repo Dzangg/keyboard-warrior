@@ -12,13 +12,10 @@ body {
   line-height: 1.5 * @baseFontSize;
   color: @fontColor;
 
-  @media (min-width: @mobileBreakpoint) {
-    background: url('https://cdn.pixabay.com/photo/2018/01/26/20/24/pattern-3109720_960_720.jpg');
-  }
 
   main, nav, footer {
     width: 100%;
-    background-color: #ffffff;
+    background-color: @backgroundColor;
     padding: 1rem;
 
     @media (min-width: @mobileBreakpoint) {
@@ -27,8 +24,14 @@ body {
     }
   }
 
+  footer {
+    width: 100%;
+  }
+
+
   nav {
     margin-top: 0;
+    width: 100%;
 
     @media (min-width: @mobileBreakpoint) {
       margin-top: 1rem;
@@ -37,9 +40,11 @@ body {
 
   main {
     flex-grow: 1;
+    width: 100%;
   }
 
   h1 {
+    text-align: center;
     font-size: 2rem;
     font-weight: bold;
     margin-top: 0.5em;
