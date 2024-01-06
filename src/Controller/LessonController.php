@@ -20,12 +20,17 @@ class LessonController
 
     public function createAction(?array $requestPost, Templating $templating, Router $router): ?string
     {
+        if (!$this->isUserLoggedIn()) {
+            $path = $router->generatePath('admin-login');
+            $router->redirect($path);
+            return null;
+        }
         if ($requestPost) {
             $lesson = Lesson::fromArray($requestPost);
             // @todo missing validation
             $lesson->save();
 
-            $path = $router->generatePath('lesson-index');
+            $path = $router->generatePath('admin-panel');
             $router->redirect($path);
             return null;
         } else {
@@ -41,6 +46,11 @@ class LessonController
 
     public function editAction(int $lessonId, ?array $requestPost, Templating $templating, Router $router): ?string
     {
+        if (!$this->isUserLoggedIn()) {
+            $path = $router->generatePath('admin-login');
+            $router->redirect($path);
+            return null;
+        }
         $lesson = Lesson::find($lessonId);
         if (! $lesson) {
             throw new NotFoundException("Missing lesson with id $lessonId");
@@ -51,7 +61,7 @@ class LessonController
             // @todo missing validation
             $lesson->save();
 
-            $path = $router->generatePath('lesson-index');
+            $path = $router->generatePath('admin-panel');
             $router->redirect($path);
             return null;
         }
@@ -65,6 +75,11 @@ class LessonController
 
     public function showAction(int $lessonId, Templating $templating, Router $router): ?string
     {
+        if (!$this->isUserLoggedIn()) {
+            $path = $router->generatePath('admin-login');
+            $router->redirect($path);
+            return null;
+        }
         $lesson = Lesson::find($lessonId);
         if (! $lesson) {
             throw new NotFoundException("Missing lesson with id $lessonId");
@@ -79,14 +94,38 @@ class LessonController
 
     public function deleteAction(int $lessonId, Router $router): ?string
     {
+        if (!$this->isUserLoggedIn()) {
+            $path = $router->generatePath('admin-login');
+            $router->redirect($path);
+            return null;
+        }
         $lesson = Lesson::find($lessonId);
         if (! $lesson) {
             throw new NotFoundException("Missing lesson with id $lessonId");
         }
 
         $lesson->delete();
-        $path = $router->generatePath('lesson-index');
+        $path = $router->generatePath('admin-panel');
         $router->redirect($path);
         return null;
+    }
+
+    public function playAction(int $lessonId, Templating $templating, Router $router): ?string
+    {
+        $lesson = Lesson::find($lessonId);
+        if (! $lesson) {
+            throw new NotFoundException("Missing lesson with id $lessonId");
+        }
+
+        $html = $templating->render('lesson/play.html.php', [
+            'lesson' => $lesson,
+            'router' => $router,
+        ]);
+        return $html;
+    }
+
+    public function isUserLoggedIn(): bool
+    {
+        return isset($_COOKIE['is_logged']) && $_COOKIE['is_logged'] === 'true';
     }
 }

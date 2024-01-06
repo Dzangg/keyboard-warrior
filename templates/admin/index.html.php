@@ -4,6 +4,7 @@
 /** @var \App\Service\Router $router */
 
 $title = 'Admin lesson panel';
+$bodyClass = 'index';
 
 ob_start(); ?>
     <h1>Admin lesson panel</h1>

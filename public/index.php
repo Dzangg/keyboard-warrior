@@ -41,6 +41,14 @@ switch ($action) {
         $controller = new \App\Controller\LessonController();
         $view = $controller->deleteAction($lessonId, $router);
         break;
+    case 'lesson-play':
+        $lessonId = $_REQUEST['id'] ?? null;
+        if (! $lessonId) {
+            break;
+        }
+        $controller = new \App\Controller\LessonController();
+        $view = $controller->playAction($lessonId, $templating, $router);
+        break;
     case 'admin-login':
         $controller = new \App\Controller\AdminController();
         $view = $controller->loginAction($templating, $router);

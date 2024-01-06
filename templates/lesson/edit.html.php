@@ -16,7 +16,7 @@ ob_start(); ?>
 
     <ul class="action-list">
         <li>
-            <a href="<?= $router->generatePath('lesson-index') ?>">Back to list</a>
+            <a href="<?= $router->generatePath('admin-panel') ?>">Back to list</a>
         </li>
         <li>
             <form action="<?= $router->generatePath('lesson-delete', ['id' => $lesson->getId()]) ?>" method="post">

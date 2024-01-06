@@ -36,6 +36,13 @@ class AdminController
         // admin logout, delete cookie
         $expiration = time() - 3600;
         setcookie('is_logged', '', $expiration, '/');
+
+        session_start();
+        // Unset all session variables
+        $_SESSION = array();
+        // Destroy the session
+        session_destroy();
+
         $path = $router->generatePath('admin-login');
         $router->redirect($path);
     }
@@ -51,6 +58,9 @@ class AdminController
             $expiration = time() + (86400 * 30); // Przykładowe ustawienie ważności ciasteczka (tutaj 30 dni)
             setcookie('is_logged', 'true', $expiration, '/', '', false, true); // Ustawienie ciasteczka
 
+            session_start();
+            $_SESSION['admin_logged_in'] = true;
+
             // Przekieruj na stronę admina lub wygeneruj odpowiednią treść
             $path = $router->generatePath('admin-panel');
             $router->redirect($path);
@@ -64,9 +74,7 @@ class AdminController
             ]);
             return $html;
         }
-
     }
-
 
     public function panelAction(Templating $templating, Router $router): ?string
     {
@@ -87,7 +95,9 @@ class AdminController
 
     private function isUserLoggedIn(): bool
     {
-        return isset($_COOKIE['is_logged']) && $_COOKIE['is_logged'] === 'true';
+//        return isset($_COOKIE['is_logged']) && $_COOKIE['is_logged'] === 'true';
+        session_start();
+        return isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] == true;
     }
 
     private function authenticate(string $username, string $password): bool

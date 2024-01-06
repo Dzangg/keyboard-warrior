@@ -5,4 +5,4 @@
 
 # ToDo - 1 kamień milowy
 ### - stylistyka w less
-### - marge całego działania projektu, połączenie local storage z całym php
+### - marge całego działania projektu, połączenie local storage z cajłym php

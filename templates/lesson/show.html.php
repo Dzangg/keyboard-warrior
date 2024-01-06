@@ -17,7 +17,7 @@ ob_start(); ?>
     </article>
 
     <ul class="action-list">
-        <li><a href="<?= $router->generatePath('lesson-index') ?>">Back to list</a></li>
+        <li><a href="<?= $router->generatePath('admin-panel') ?>">Back to list</a></li>
         <li><a href="<?= $router->generatePath('lesson-edit', ['id'=> $lesson->getId()]) ?>">Edit</a></li>
     </ul>
 <?php $main = ob_get_clean();

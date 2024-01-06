@@ -13,7 +13,7 @@ ob_start(); ?>
         <input type="hidden" name="action" value="lesson-create">
     </form>
 
-    <a href="<?= $router->generatePath('lesson-index') ?>">Back to list</a>
+    <a href="<?= $router->generatePath('admin-panel') ?>">Back to list</a>
 <?php $main = ob_get_clean();
 
 include __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'base.html.php';
