@@ -3,6 +3,8 @@
 /** @var \App\Model\Lesson $lesson */
 /** @var \App\Service\Router $router */
 
+include 'function.php';
+
 $title = "Lesson {$lesson->getId()}";
 $bodyClass = 'index';
 
@@ -11,6 +13,12 @@ ob_start(); ?>
 
     <h2>Difficulty:  <?= $lesson->getDifficulty() ?> </h2>
     <h2>Learning letters:  <?= $lesson->getLetters() ?> </h2>
+    <div id="overlay" class="overlay">
+        <div id="modal" class="modal">
+            <p>Lesson <span id="result"></span> <br> Mistakes count: <span id="mistakesCount"></span> <br>Accuracy: <span id="accuracy"></span>%</p>
+            <p><a href="<?= $router->generatePath('lesson-index') ?>">Back to lessons</a></p>
+        </div>
+    </div>
 
 <?php
 $contentArray = str_split($lesson->getContent());
@@ -28,73 +36,123 @@ foreach ($contentArray as $item) {
 
     <p><a href="<?= $router->generatePath('lesson-index') ?>">Back to lessons</a></p>
 
-
     <script>
-        let lessonContent = <?= json_encode($lesson->getContent()) ?>;
-        lessonContent = lessonContent.split('');
-        let currentPosition = 1;
-        let mistakesCount = 0;
-        let isFinished = false;
-        applyCurrentStyle(currentPosition);
-
-        document.addEventListener('keydown', function(event) {
-            if (isFinished) {
-                return;
+        class Lesson {
+            constructor(content) {
+                this.lessonContent = content.split('');
+                this.currentPosition = 1;
+                this.mistakesCount = 0;
+                this.accuracyResult = 0;
+                this.finalResultLesson = 0;
+                this.isFinished = false;
+                this.initializeLesson();
             }
 
-            const properKeyName = lessonContent[currentPosition - 1];
-            // console.log(lessonContent.slice(0,currentPosition+1));
+            initializeLesson() {
+                this.applyCurrentStyle(this.currentPosition);
 
-            if (event.key === properKeyName) {
-                validate(currentPosition, true);
-                currentPosition++;
-                if (currentPosition === lessonContent.length + 1) {
-                    lessonCompleted();
+                document.addEventListener('keydown', (event) => {
+                    if (this.isFinished) {
+                        return;
+                    }
+
+                    const properKeyName = this.lessonContent[this.currentPosition - 1];
+
+                    if (event.key === properKeyName) {
+                        this.validate(true);
+                        this.currentPosition++;
+
+                        if (this.currentPosition === this.lessonContent.length + 1) {
+                            this.lessonCompleted();
+                        }
+                    } else {
+                        console.log('Wrong key pressed!');
+                        this.validate(false);
+                        this.currentPosition++;
+
+                        this.mistakesCount++;
+
+                        if (this.currentPosition === this.lessonContent.length + 1) {
+                            this.lessonCompleted();
+                        }
+                    }
+                    this.applyCurrentStyle(this.currentPosition);
+                });
+            }
+
+            applyCurrentStyle(position) {
+                if (position <= this.lessonContent.length) {
+                    const characterId = 'character' + position;
+                    const characterElement = document.getElementById(characterId);
+                    characterElement.classList.add('current');
                 }
-            } else {
-                console.log('Wrong key pressed!');
-                validate(currentPosition, false);
-                currentPosition++;
 
-                mistakesCount++;
-                if (currentPosition === lessonContent.length + 1) {
-                    lessonCompleted();
+                if (position > 1) {
+                    const previousCharacterId = 'character' + (position - 1);
+                    const previousCharacterElement = document.getElementById(previousCharacterId);
+                    previousCharacterElement.classList.remove('current');
                 }
             }
-            applyCurrentStyle(currentPosition);
-        });
 
-        function applyCurrentStyle(position) {
-            if (position <= lessonContent.length) {
-                const characterId = 'character' + position;
+            validate(isValid) {
+                const characterId = 'character' + this.currentPosition;
                 const characterElement = document.getElementById(characterId);
-                characterElement.classList.add('current');
+
+                if (isValid) {
+                    characterElement.classList.add('valid');
+                } else {
+                    characterElement.classList.add('invalid');
+                }
             }
-            if (position > 1) {
-                const previousCharacterId = 'character' + (position - 1);
-                const previousCharacterElement = document.getElementById(previousCharacterId);
-                previousCharacterElement.classList.remove('current');
+
+            lessonCompleted() {
+                this.isFinished = true;
+
+                // Show the modal overlay
+                this.showOverlay();
+                this.Accuracy();
+                this.resultLesson();
+
+                // Update modal content
+                document.getElementById('mistakesCount').innerText = this.mistakesQuantity();
+                document.getElementById('accuracy').innerText = this.Accuracy();
+                document.getElementById('result').innerText = this.resultLesson();
+
+                // Set lesson color
+                const lessonId = <?= $lesson->getId() ?>; // Fetch lesson ID from PHP
+                const result = this.resultLesson();
+                console.log(result);
+                // Set lesson color using setLesson function
+                setLesson(lessonId, result);
+            }
+
+            showOverlay() {
+                var overlay = document.getElementById('overlay');
+                overlay.style.display = 'flex';
+                document.body.style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
+            }
+
+            mistakesQuantity() {
+                return this.mistakesCount;
+            }
+
+            Accuracy() {
+                this.accuracyResult = ((this.lessonContent.length - this.mistakesCount) / this.lessonContent.length * 100)
+                return this.accuracyResult;
+            }
+
+            resultLesson() {
+                if (this.accuracyResult > 50) {
+                    this.finalResultLesson = "completed!";
+                    return this.finalResultLesson;
+                }
+                this.finalResultLesson = "failed!";
+                return this.finalResultLesson;
             }
         }
 
-        function validate(position, isValid) {
-            const characterId = 'character' + position;
-            const characterElement = document.getElementById(characterId);
-
-            if (isValid) {
-                characterElement.classList.add('valid');
-            } else {
-                characterElement.classList.add('invalid');
-            }
-        }
-
-        function lessonCompleted() {
-            isFinished = true;
-            console.log('Lesson completed!')
-            console.log('Mistakes count: ' + mistakesCount)
-            console.log('Accuracy: ' + (lessonContent.length - mistakesCount) / lessonContent.length * 100 + '%')
-        }
-
+        // Create an instance of the Lesson class with the lesson content
+        const lessonInstance = new Lesson(<?= json_encode($lesson->getContent()) ?>);
     </script>
 
 <?php $main = ob_get_clean();
