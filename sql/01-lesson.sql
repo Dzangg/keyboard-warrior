@@ -21,6 +21,8 @@ create table if not exists admin
 -- insert into admin (username, password) values ('admin', 'admin');
 --
 --
+-- --add sample data to lesson table
+--
 -- INSERT INTO lesson (title, difficulty, letters, content) VALUES
 --                                                              ('Lesson 1', 'Easy', 'abc', 'cba abb bba cac'),
 --                                                              ('Lesson 2', 'Medium', 'efg', 'eee fff ggg gfa gfe'),
