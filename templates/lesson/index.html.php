@@ -15,7 +15,7 @@ ob_start(); ?>
         <?php foreach ($lessons as $lesson): ?>
 
         <li>
-            <a href="<?= $router->generatePath('lesson-play',  ['id' => $lesson->getId()]) ?>">--------
+            <a href="<?= $router->generatePath('lesson-play',  ['id' => $lesson->getId()]) ?>">
                 <h3 id="lesson<?= $lesson->getId() ?>">Title: <?= $lesson->getTitle() ?></h3>
                 <p>Difficulty: <?= $lesson->getDifficulty() ?></p>
             </a>

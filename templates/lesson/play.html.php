@@ -3,16 +3,19 @@
 /** @var \App\Model\Lesson $lesson */
 /** @var \App\Service\Router $router */
 
-include 'function.php';
 
 $title = "Lesson {$lesson->getId()}";
 $bodyClass = 'index';
 
 ob_start(); ?>
-    <h1>Lesson <?= $lesson->getId() ?> </h1>
 
-    <h2>Difficulty:  <?= $lesson->getDifficulty() ?> </h2>
-    <h2>Learning letters:  <?= $lesson->getLetters() ?> </h2>
+<div class="lesson-info">
+    <h1 class="lesson-name">Lesson <?= $lesson->getId() ?> </h1>
+    <h2 class="lesson-difficulty">Difficulty:  <?= $lesson->getDifficulty() ?> </h2>
+    <h2 class="lesson-letters">Learning letters:  <?= $lesson->getLetters() ?> </h2>
+
+</div>
+
     <div id="overlay" class="overlay">
         <div id="modal" class="modal">
             <p>Lesson <span id="result"></span> <br> Mistakes count: <span id="mistakesCount"></span> <br>Accuracy: <span id="accuracy"></span>%</p>
@@ -25,16 +28,23 @@ $contentArray = str_split($lesson->getContent());
 
 // Counter variable for generating unique IDs
 $counter = 1;
+echo '<div class="lesson-content">';
 
 foreach ($contentArray as $item) {
+    // Check if $item is whitespace and replace it with &nbsp;
+    $itemContent = ($item === ' ') ? '&nbsp;' : $item;
+
     $itemId = 'character' . $counter;
-    echo '<span  id="' . $itemId . '">' . $item . '</span>';
+    echo '<div class="lesson-letter-container" id="container' . $counter .'">';
+    echo '<p class="lesson-letter" id="' . $itemId . '">' . $itemContent . '</p>';
+    echo '</div>';
     $counter++;
 }
+echo '</div>';
 ?>
 
+    <p class="back-link"><a href="<?= $router->generatePath('lesson-index') ?>">Back to lessons</a></p>
 
-    <p><a href="<?= $router->generatePath('lesson-index') ?>">Back to lessons</a></p>
 
     <script>
         class Lesson {
@@ -96,7 +106,8 @@ foreach ($contentArray as $item) {
 
             validate(isValid) {
                 const characterId = 'character' + this.currentPosition;
-                const characterElement = document.getElementById(characterId);
+                const containerName = 'container' + this.currentPosition;
+                const characterElement = document.getElementById(containerName);
 
                 if (isValid) {
                     characterElement.classList.add('valid');
