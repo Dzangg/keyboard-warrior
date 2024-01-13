@@ -10,7 +10,7 @@ $bodyClass = 'index';
 ob_start(); ?>
 
     <audio id="keyPressAudio">
-        <source src="keyb.mp3" type="audio/mpeg">
+        <source src="assets/media/keyb.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
 
@@ -249,18 +249,20 @@ echo '</div>';
         let keys = keyboard.getElementsByClassName('key');
 
         document.addEventListener('keydown', (event) => {
+            document.getElementById('keyPressAudio').play();
+            console.log(event);
             for (let i = 0; i < keys.length; i++) {
-                if (event.key.toLowerCase() === keys[i].textContent.toLowerCase()) {
+                if (event.key.toLowerCase() === keys[i].textContent.toLowerCase() || event.code.toLowerCase() === keys[i].textContent.toLowerCase()) {
                     keys[i].style.backgroundColor = 'red';
                     keys[i].style.transition = 'background-color 0.3s ease';
 
                     // Odtwarzaj dźwięk za pomocą elementu audio
-                    document.getElementById('keyPressAudio').play();
-                    console.log('cos')
-                    document.addEventListener('keyup', (event) => {
+
+
+                    setTimeout(()=>{
+                        keys[i].style.transition = 'background-color 0.3s ease';
                         keys[i].style.backgroundColor = '';
-                        keys[i].style.transition = 'background-color 0.9s ease';
-                    });
+                    },150);
                 }
             }
         });
