@@ -51,18 +51,25 @@ ob_start(); ?>
 
     <script>
         function markLessons() {
-            if (doneLessons.length > 0) {
+            if (doneLessons.length > 0 || doneCustomLessons.length > 0) {
                 let doneLessons = JSON.parse(localStorage.getItem('data')) || [];
                 let accuracys = [];
                 for (let i = 0; i < doneLessons.length; i++) {
                     accuracys.push(doneLessons[i].accuracy);
                 }
+                for (let i = 0; i < doneCustomLessons.length; i++) {
+                    if (doneCustomLessons[i].accuracy) {
+                        accuracys.push(doneCustomLessons[i].accuracy);
+                    }
+                }
                 let averageAccuracy = accuracys.reduce((a, b) => a + b, 0) / accuracys.length;
 
                 let doneLessonsCnt = document.getElementById('done-lessons');
                 let lessonsAccuracy = document.getElementById('lessons-accuracy');
+                let actuallyDone = doneCustomLessons.filter(lesson => lesson.accuracy);
+                console.log(actuallyDone.length)
 
-                doneLessonsCnt.innerText = "Done lessons: " + doneLessons.length.toString();
+                doneLessonsCnt.innerText = "Done lessons: " + (doneLessons.length + actuallyDone.length);
                 lessonsAccuracy.innerText = "Average accuracy: " + averageAccuracy.toString().substring(0,5) + "%";
             } else {
                 let doneLessonsCnt = document.getElementById('done-lessons');
@@ -91,7 +98,6 @@ ob_start(); ?>
 
             for (let i = 0; i < doneCustomLessons.length; i++) {
                 let lesson = doneCustomLessons[i];
-                console.log(lesson)
                 // Sprawdź, czy lesson ma właściwość "id" i "color"
                 if (lesson && lesson.id && lesson.color) {
                     let element = document.getElementById("custom-lesson" + lesson.id);

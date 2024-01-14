@@ -221,7 +221,7 @@ echo '</div>';
                 const result = this.resultLesson();
                 console.log(result);
                 // Set lesson color using setLesson function
-                setLesson(lessonId, result);
+                setLesson(lessonId, result, this.accuracyResult);
             }
 
             showOverlay() {
