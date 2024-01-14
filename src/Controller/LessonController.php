@@ -10,7 +10,7 @@ class LessonController
 {
     public function indexAction(Templating $templating, Router $router): ?string
     {
-        $lessons = Lesson::findAll();
+        $lessons = Lesson::findAllSortedByDifficulty();
         $html = $templating->render('lesson/index.html.php', [
             'lessons' => $lessons,
             'router' => $router,
@@ -40,6 +40,27 @@ class LessonController
         $html = $templating->render('lesson/create.html.php', [
             'lesson' => $lesson,
             'router' => $router,
+        ]);
+        return $html;
+    }
+    public function customAction(?array $requestPost, Templating $templating, Router $router): ?string
+    {
+        $html = $templating->render('lesson/createcustom.html.php', [
+            'router' => $router,
+        ]);
+        return $html;
+    }
+
+    public function customPlayAction(string $lessonId, string $lessonTitle, string $lessonLetters, string $lessonContent, string $lessonDifficulty, Templating $templating, Router $router): ?string
+    {
+        $html = $templating->render('lesson/playcustom.html.php', [
+            'router' => $router,
+            'lessonId' => $lessonId,
+            'lessonTitle' => $lessonTitle,
+            'lessonLetters' => $lessonLetters,
+            'lessonContent' => $lessonContent,
+            'lessonDifficulty' => $lessonDifficulty,
+
         ]);
         return $html;
     }

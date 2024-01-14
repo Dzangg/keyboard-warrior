@@ -3,32 +3,27 @@
 ?>
 
 <script>
-    let doneLessons = JSON.parse(localStorage.getItem('data')) || [];
+    let doneCustomLessons = JSON.parse(localStorage.getItem('lessons')) || [];
 
-    function setLesson(id, result, accuracy) {
+    function setLesson(id, result) {
         // Sprawdź, czy doneLessons zawiera lekcję o danym id
-        const existingLessonIndex = doneLessons.findIndex(lesson => lesson.id === id);
+        const existingLessonIndex = doneCustomLessons.findIndex(lesson => lesson.id === id);
 
         if (existingLessonIndex !== -1) {
             // Aktualizuj wynik i kolor dla istniejącej lekcji
-            if (doneLessons[existingLessonIndex].accuracy < accuracy) {
-                doneLessons[existingLessonIndex].result = result;
-                doneLessons[existingLessonIndex].color = getLessonColor(id, result);
-                doneLessons[existingLessonIndex].accuracy = accuracy;
-            }
-
+            doneCustomLessons[existingLessonIndex].result = result;
+            doneCustomLessons[existingLessonIndex].color = getLessonColor(id, result);
         } else {
             // Dodaj nowy wpis do doneLessons
-            doneLessons.push({
+            doneCustomLessons.push({
                 id: id,
                 result: result,
-                accuracy: accuracy,
                 color: getLessonColor(id, result)
             });
         }
 
         // Aktualizuj local storage
-        localStorage.setItem('data', JSON.stringify(doneLessons));
+        localStorage.setItem('lessons', JSON.stringify(doneCustomLessons));
     }
 
     function getLessonColor(id, result) {

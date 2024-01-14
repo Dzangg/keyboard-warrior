@@ -1,28 +1,37 @@
 <?php
 
-/** @var \App\Model\Lesson $lesson */
 /** @var \App\Service\Router $router */
 
-include 'function.php';
+/** @var $lessonId */
+/** @var $lessonTitle */
+/** @var $lessonLetters */
+/** @var $lessonContent */
+/** @var $lessonDifficulty */
 
-$title = "Lesson {$lesson->getId()}";
+
+include 'functionCustom.php';
+
+$title = "Custom lesson $lessonId";
 $bodyClass = 'index';
+
 
 ob_start(); ?>
 
-    <audio id="keyPressAudio">
-        <source src="keyb.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
+    <h1>Custom Lesson Play</h1>
+    <div class="lesson-info">
+        <h1 class="lesson-name">Lesson <?= $lessonId ?> </h1>
+        <h2 class="lesson-difficulty">Difficulty:  <?= $lessonDifficulty ?> </h2>
+        <h2 class="lesson-letters">Learning letters:  <?= $lessonLetters ?> </h2>
+    </div>
 
-<div class="lesson-info">
-    <h1 class="lesson-name">Lesson <?= $lesson->getId() ?> </h1>
-    <h2 class="lesson-difficulty">Difficulty:  <?= $lesson->getDifficultyString() ?> </h2>
-    <h2 class="lesson-letters">Learning letters:  <?= $lesson->getLetters() ?> </h2>
-</div>
+<!--    <audio id="keyPressAudio">-->
+<!--        <source src="keyb.mp3" type="audio/mpeg">-->
+<!--        Your browser does not support the audio element.-->
+<!--    </audio>-->
+
 
 <?php
-$contentArray = str_split(strtoupper($lesson->getContent()));
+$contentArray = str_split(strtoupper($lessonContent));
 
 // Counter variable for generating unique IDs
 $counter = 1;
@@ -184,7 +193,6 @@ echo '</div>';
             }
 
             validate(isValid) {
-                const characterId = 'character' + this.currentPosition;
                 const containerName = 'container' + this.currentPosition;
                 const characterElement = document.getElementById(containerName);
 
@@ -209,11 +217,11 @@ echo '</div>';
                 document.getElementById('result').innerText = this.resultLesson();
 
                 // Set lesson color
-                const lessonId = <?= $lesson->getId() ?>; // Fetch lesson ID from PHP
+                const lessonId = <?= $lessonId ?>; // Fetch lesson ID from PHP
                 const result = this.resultLesson();
                 console.log(result);
                 // Set lesson color using setLesson function
-                setLesson(lessonId, result, this.accuracyResult);
+                setLesson(lessonId, result);
             }
 
             showOverlay() {
@@ -242,7 +250,7 @@ echo '</div>';
         }
 
         // Create an instance of the Lesson class with the lesson content
-        const lessonInstance = new Lesson(<?= json_encode($lesson->getContent()) ?>);
+        const lessonInstance = new Lesson("<?= $lessonContent ?>");
 
         // keyboard handler
         let keyboard = document.getElementsByClassName('keyboard')[0];
@@ -254,13 +262,13 @@ echo '</div>';
                     // Prevent the default scroll behavior
                     event.preventDefault();
                 }
+
                 if (event.key.toLowerCase() === keys[i].textContent.toLowerCase()) {
                     keys[i].style.backgroundColor = 'red';
                     keys[i].style.transition = 'background-color 0.3s ease';
 
                     // Odtwarzaj dźwięk za pomocą elementu audio
-                    document.getElementById('keyPressAudio').play();
-                    console.log('cos')
+                    // document.getElementById('keyPressAudio').play();
                     document.addEventListener('keyup', (event) => {
                         keys[i].style.backgroundColor = '';
                         keys[i].style.transition = 'background-color 0.9s ease';
@@ -269,6 +277,7 @@ echo '</div>';
             }
         });
     </script>
+
 
 <?php $main = ob_get_clean();
 

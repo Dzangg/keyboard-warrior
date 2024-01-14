@@ -11,7 +11,7 @@ ob_start(); ?>
     <article>
         <h3>Id: <?= $lesson->getId() ?></h3>
         <h3>Title: <?= $lesson->getTitle() ?></h3>
-        <h3>Difficulty: <?= $lesson->getDifficulty() ?></h3>
+        <h3>Difficulty: <?= $lesson->getDifficultyString() ?></h3>
         <h3>Letters: <?= $lesson->getLetters() ?></h3>
         <h3>Content: <?= $lesson->getContent(); ?> </h3>
     </article>

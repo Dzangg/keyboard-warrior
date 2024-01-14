@@ -61,6 +61,20 @@ class Lesson
         $this->content = $content;
     }
 
+    public function getDifficultyString(): string
+    {
+        switch ($this->getDifficulty()) {
+            case 1:
+                return 'Easy';
+            case 2:
+                return 'Medium';
+            case 3:
+                return 'Hard';
+            default:
+                return 'Unknown';
+        }
+    }
+
     public static function fromArray($array): Lesson
     {
         $lesson = new self();
@@ -104,6 +118,23 @@ class Lesson
 
         return $lessons;
     }
+
+    public static function findAllSortedByDifficulty(): array
+    {
+        $pdo = new \PDO(Config::get('db_dsn'), Config::get('db_user'), Config::get('db_pass'));
+        $sql = 'SELECT * FROM lesson ORDER BY difficulty ASC'; // You can adjust ASC to DESC if needed
+        $statement = $pdo->prepare($sql);
+        $statement->execute();
+
+        $lessons = [];
+        $lessonsArray = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        foreach ($lessonsArray as $lessonArray) {
+            $lessons[] = self::fromArray($lessonArray);
+        }
+
+        return $lessons;
+    }
+
 
     public static function find($id): ?Lesson
     {

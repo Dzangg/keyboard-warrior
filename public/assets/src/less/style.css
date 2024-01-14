@@ -294,6 +294,35 @@ footer::before {
   font-size: 1rem;
   margin: 0 10px 10px 10px;
 }
+.custom-lesson-link {
+  text-align: center;
+  margin: 10px;
+}
+.custom-lesson-button {
+  background-color: #F5F5DC;
+  border: 2px solid #e1e1e1;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  cursor: pointer;
+}
+.custom-lesson-button:hover {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+.custom-lesson-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.statistic-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+}
 .show article {
   font-style: italic;
   color: #6d6d6d;
@@ -363,24 +392,31 @@ body {
   margin: 16px;
 }
 .lesson-content {
-  margin: 50px;
+  margin: 20px auto;
+  max-width: 1500px;
+  /* Change width to max-width */
   display: flex;
+  flex-wrap: wrap;
+  /* Allow wrapping to the next line */
   justify-content: center;
   align-items: center;
+}
+.lesson-letter-container > p {
+  text-align: center;
 }
 .lesson-letter-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 60px;
-  height: 100px;
+  width: 30px;
+  height: 50px;
   border: 1px solid black;
   padding: 10px;
-  margin: 0 10px;
-  font-size: 2rem;
+  margin: 10px 10px;
+  font-size: 1.2rem;
 }
 .lesson-letter {
-  padding-bottom: 8px;
+  padding-bottom: 2px;
   min-height: 20px;
   min-width: 22px;
 }

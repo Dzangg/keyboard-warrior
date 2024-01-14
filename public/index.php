@@ -17,6 +17,20 @@ switch ($action) {
         $controller = new \App\Controller\LessonController();
         $view = $controller->createAction($_REQUEST['lesson'] ?? null, $templating, $router);
         break;
+    case 'lesson-custom-create':
+        $controller = new \App\Controller\LessonController();
+        $view = $controller->customAction($_REQUEST['lesson'] ?? null, $templating, $router);
+        break;
+    case 'lesson-custom-play':
+        $lessonId = $_REQUEST['lessonId'] ?? null;
+        $lessonTitle = $_REQUEST['lessonTitle'] ?? null;
+        $lessonLetters = $_REQUEST['lessonLetters'] ?? null;
+        $lessonContent = $_REQUEST['lessonContent'] ?? null;
+        $lessonDifficulty = $_REQUEST['lessonDifficulty'] ?? null;
+
+        $controller = new \App\Controller\LessonController();
+        $view = $controller->customPlayAction($lessonId, $lessonTitle, $lessonLetters, $lessonContent, $lessonDifficulty, $templating, $router);
+        break;
     case 'lesson-edit':
         $lessonId = $_REQUEST['id'] ?? null;
         if (! $lessonId) {
@@ -49,6 +63,7 @@ switch ($action) {
         $controller = new \App\Controller\LessonController();
         $view = $controller->playAction($lessonId, $templating, $router);
         break;
+
     case 'admin-login':
         $controller = new \App\Controller\AdminController();
         $view = $controller->loginAction($templating, $router);

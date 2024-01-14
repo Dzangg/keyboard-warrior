@@ -7,6 +7,20 @@ $title = 'Admin lesson panel';
 $bodyClass = 'index';
 
 ob_start(); ?>
+<?php
+function getDifficultyString($difficulty) {
+    switch ($difficulty) {
+        case 1:
+            return 'Easy';
+        case 2:
+            return 'Medium';
+        case 3:
+            return 'Hard';
+        default:
+            return 'Unknown';
+    }
+}
+?>
     <h1>Admin lesson panel</h1>
 
     <a href="<?= $router->generatePath('lesson-create') ?>">Create new</a>
@@ -15,7 +29,7 @@ ob_start(); ?>
         <?php foreach ($lessons as $lesson): ?>
             <li>
                 <h3>Title: <?= $lesson->getTitle() ?></h3>
-                <p>Difficulty: <?= $lesson->getDifficulty() ?></p>
+                <p>Difficulty: <?= $lesson->getDifficultyString() ?></p>
 
                 <ul class="action-list">
                     <li><a href="<?= $router->generatePath('lesson-show', ['id' => $lesson->getId()]) ?>">Details</a></li>
