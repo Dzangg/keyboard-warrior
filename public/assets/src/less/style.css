@@ -270,7 +270,6 @@ footer::before {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  background-color: #ffa650;
 }
 .index ul.index-list li {
   width: calc(33.3333% - 20px);
@@ -348,12 +347,105 @@ body {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 .current {
-  border-bottom: 1px solid #000;
+  border-bottom: 4px solid #24a3f0;
 }
 .valid {
   background: rgba(51, 170, 51, 0.7);
 }
 .invalid {
   background: rgba(255, 0, 0, 0.7);
+}
+.lesson-difficulty,
+.lesson-letters,
+.back-link {
+  text-align: center;
+  font-size: 1.2rem;
+  margin: 16px;
+}
+.lesson-content {
+  margin: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.lesson-letter-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60px;
+  height: 100px;
+  border: 1px solid black;
+  padding: 10px;
+  margin: 0 10px;
+  font-size: 2rem;
+}
+.lesson-letter {
+  padding-bottom: 8px;
+  min-height: 20px;
+  min-width: 22px;
+}
+.keyboard {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 50vh;
+  width: 70vw;
+  background-color: #ffa650;
+  border-radius: 20px;
+}
+.row {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.key {
+  background: #ffa222;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 3px;
+}
+.test {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+.delete {
+  width: 20%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: center;
+}
+.space {
+  width: 50%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: center;
+}
+.enter {
+  width: 20%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: center;
+}
+.shift {
+  width: 12%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.ctrl {
+  width: 10%;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.alt {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  width: 10%;
+}
+h1 {
+  text-align: center;
 }
 /*# sourceMappingURL=style.css.map */
