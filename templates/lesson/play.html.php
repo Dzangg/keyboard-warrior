@@ -11,18 +11,18 @@ $bodyClass = 'index';
 ob_start(); ?>
 
     <audio id="keyPressAudio">
-        <source src="assets/media/keyb.mp3" type="audio/mpeg">
+        <source src="/assets/media/keyb.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
 
-<div class="lesson-info">
-    <h1 class="lesson-name">Lesson <?= $lesson->getId() ?> </h1>
-    <h2 class="lesson-difficulty">Difficulty:  <?= $lesson->getDifficultyString() ?> </h2>
-    <h2 class="lesson-letters">Learning letters:  <?= $lesson->getLetters() ?> </h2>
-</div>
+    <div class="lesson-info">
+        <h1 class="lesson-name">Lesson <?= $lesson->getId() ?> </h1>
+        <h2 class="lesson-difficulty">Difficulty:  <?= $lesson->getDifficulty() ?> </h2>
+        <h2 class="lesson-letters">Learning letters:  <?= $lesson->getLetters() ?> </h2>
+    </div>
 
 <?php
-$contentArray = str_split(strtoupper($lesson->getContent()));
+$contentArray = str_split($lesson->getContent());
 
 // Counter variable for generating unique IDs
 $counter = 1;
@@ -40,8 +40,10 @@ foreach ($contentArray as $item) {
 }
 echo '</div>';
 ?>
-
-
+    <p id="typingSpeedDisplay"></p>
+    <div id="typingSpeedBarContainer">
+        <div id="typingSpeedBar"></div>
+    </div>
     <div class="test">
         <div class="keyboard">
             <div class="row">
@@ -116,14 +118,16 @@ echo '</div>';
     <div id="overlay" class="overlay">
         <div id="modal" class="modal">
             <p>Lesson <span id="result"></span> <br> Mistakes count: <span id="mistakesCount"></span> <br>Accuracy: <span id="accuracy"></span>%</p>
-            <p><a href="<?= $router->generatePath('lesson-index') ?>">Back to lessons</a></p>
         </div>
     </div>
 
-
+    <div id="startOverlay" class="overlay start-overlay">
+        <div id="modal" class="modal">
+            Press any key to start
+        </div>
+    </div>
 
     <p class="back-link"><a href="<?= $router->generatePath('lesson-index') ?>">Back to lessons</a></p>
-
 
     <script>
         class Lesson {
@@ -134,15 +138,29 @@ echo '</div>';
                 this.accuracyResult = 0;
                 this.finalResultLesson = 0;
                 this.isFinished = false;
+                this.isStarted = false;
+                this.firstKeyPress = true; // Add a flag to track the first key press
                 this.initializeLesson();
             }
 
             initializeLesson() {
+                this.showStartOverlay();
                 this.applyCurrentStyle(this.currentPosition);
 
                 document.addEventListener('keydown', (event) => {
                     if (this.isFinished) {
                         return;
+                    }
+
+                    if (!this.isStarted) {
+                        this.hideStartOverlay();
+                        this.isStarted = true;
+                        actualData = Date.now();
+                    }
+
+                    if (this.firstKeyPress) {
+                        this.firstKeyPress = false;
+                        return; // Ignore the first key press
                     }
 
                     const properKeyName = this.lessonContent[this.currentPosition - 1];
@@ -216,10 +234,42 @@ echo '</div>';
                 setLesson(lessonId, result, this.accuracyResult);
             }
 
+            showStartOverlay() {
+                const startOverlay = document.getElementById('startOverlay');
+                startOverlay.style.display = 'flex';
+
+                // Dodaj obsługę kliknięcia na overlay tylko wtedy, gdy jest widoczny
+                startOverlay.addEventListener('click', () => {
+                    this.hideStartOverlay();
+                });
+
+                document.addEventListener('keydown', () => {
+                    this.hideStartOverlay();
+                });
+            }
+
+            hideStartOverlay() {
+                const startOverlay = document.getElementById('startOverlay');
+                startOverlay.style.display = 'none';
+            }
+
             showOverlay() {
-                var overlay = document.getElementById('overlay');
+                let overlay = document.getElementById('overlay');
                 overlay.style.display = 'flex';
                 document.body.style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
+
+                // Dodaj obsługę kliknięcia na tło overlay tylko wtedy, gdy jest widoczne
+                overlay.addEventListener('click', (event) => {
+                    if (event.target === document.getElementById('overlay')) {
+                        this.hideOverlay();
+                    }
+                });
+            }
+
+            hideOverlay() {
+                let overlay = document.getElementById('overlay');
+                overlay.style.display = 'none';
+                document.body.style.backgroundColor = ''; // Przywróć kolor tła
             }
 
             mistakesQuantity() {
@@ -250,26 +300,159 @@ echo '</div>';
 
         document.addEventListener('keydown', (event) => {
             document.getElementById('keyPressAudio').play();
-            console.log(event);
+
             for (let i = 0; i < keys.length; i++) {
                 if (event.key === " ") {
-                    // Prevent the default scroll behavior
                     event.preventDefault();
                 }
+
                 if (event.key.toLowerCase() === keys[i].textContent.toLowerCase() || event.code.toLowerCase() === keys[i].textContent.toLowerCase()) {
-                    keys[i].style.backgroundColor = 'red';
+                    const originalColor = keys[i].style.backgroundColor;
+
+                    keys[i].style.backgroundColor = 'white';
                     keys[i].style.transition = 'background-color 0.3s ease';
 
-                    // Odtwarzaj dźwięk za pomocą elementu audio
-
-
-                    setTimeout(()=>{
+                    setTimeout(() => {
                         keys[i].style.transition = 'background-color 0.3s ease';
-                        keys[i].style.backgroundColor = '';
-                    },150);
+                        keys[i].style.backgroundColor = originalColor;
+                    }, 150);
                 }
             }
         });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            let keyboardColorInput = document.querySelector('.keyboard-color-input');
+            let keyColorInput = document.querySelector('.key-color-input');
+            let keyboard = document.querySelector('.keyboard');
+            let keys = document.querySelectorAll('.key');
+
+            keyboardColorInput.addEventListener('input', function() {
+                let selectedColor = keyboardColorInput.value;
+                keyboard.style.backgroundColor = selectedColor;
+            });
+
+            keyColorInput.addEventListener('input', function() {
+                let selectedKeyColor = keyColorInput.value;
+                keys.forEach(function(key) {
+                    key.style.backgroundColor = selectedKeyColor;
+                    key.style.transition = 'background-color 0.3s ease';
+                });
+            });
+        });
+
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Pobierz litery z lesson-letters
+            let lessonLetters = '<?= $lesson->getLetters() ?>';
+            let lessonLettersArray = lessonLetters.split('');
+
+            // Pobierz wszystkie klawisze na klawiaturze
+            let keys = document.querySelectorAll('.key');
+
+            // Dodaj klasę highlight do klawiszy odpowiadających literom z lesson-letters
+            lessonLettersArray.forEach(function(letter) {
+                keys.forEach(function(key) {
+                    if (key.textContent.toLowerCase() === letter.toLowerCase()) {
+                        key.classList.add('highlight');
+                    }
+                });
+            });
+        });
+
+
+
+
+
+
+
+
+
+        let keyPressTimes = 0;
+        let actualData = Date.now();
+        let typingSpeedBar = document.getElementById("typingSpeedBar");
+        let decreaseSpeedInterval;
+
+        function calculateTypingSpeed() {
+            if (!lessonInstance.isStarted) {
+                return 0; // Jeśli lekcja się nie rozpoczęła, zwróć 0
+            }
+
+            let newData = (Date.now() - actualData) / 1000;
+            if (newData === 0) {
+                return 0; // Aby uniknąć dzielenia przez zero
+            }
+
+            keyPressTimes += 1;
+            const typingSpeed = keyPressTimes / newData;
+            return typingSpeed;
+        }
+
+
+        function updateTypingSpeedDisplay() {
+            if(lessonInstance.isFinished){
+                return;
+            }
+            const speed = calculateTypingSpeed();
+            const displayElement = document.getElementById("typingSpeedDisplay");
+
+            let color;
+
+            if (speed >= 5) {
+                color = "green";
+            } else if (speed >= 2) {
+                color = "#b86e14";
+            } else {
+                color = "red";
+            }
+
+            displayElement.textContent = `Current typing speed: ${speed.toFixed(2)} keys per second`;
+            displayElement.style.color = color;
+
+            // Sprawdź, czy szerokość paska jest ustawiona
+            if (typingSpeedBar.style.width === "inf") {
+                typingSpeedBar.style.width = "0%";
+            }
+
+            // Update progress bar dynamically
+            const maxSpeed = 5; // Maksymalna prędkość, na której pasek będzie pełen
+            const percentage = (speed / maxSpeed) * 100;
+            typingSpeedBar.style.width = `${Math.max(percentage, 0)}%`; // Niech pasek nie spada poniżej zera
+            typingSpeedBar.style.backgroundColor = (percentage >= 100) ? "green" : color;
+        }
+
+        function decreaseTypingSpeed() {
+            if (lessonInstance.isFinished) {
+                clearInterval(decreaseSpeedInterval); // Zatrzymaj interval, jeśli lekcja się zakończyła
+                return;
+            }
+
+            const currentWidth = parseFloat(typingSpeedBar.style.width) || 0;
+            if (currentWidth > 0) {
+                typingSpeedBar.style.width = `${Math.max(currentWidth - 0.1, 0)}%`;
+            }
+        }
+
+
+        function onKeyPress(event) {
+            if (!lessonInstance.isStarted) {
+                lessonInstance.isStarted = true;
+                actualData = Date.now();
+                keyPressTimes = 0;
+            }
+            updateTypingSpeedDisplay();
+            // Reset interval
+            clearInterval(decreaseSpeedInterval);
+            decreaseSpeedInterval = setInterval(decreaseTypingSpeed, 100); // 100 milliseconds interval
+        }
+
+        document.addEventListener("keydown", onKeyPress);
+
+        // Inicjalizacja prędkościomierza na 0
+        updateTypingSpeedDisplay();
+
+        // Dodana funkcja aktualizująca prędkość dynamicznie
+        setInterval(updateTypingSpeedDisplay, 1000);
     </script>
 
 <?php $main = ob_get_clean();
