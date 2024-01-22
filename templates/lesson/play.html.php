@@ -332,19 +332,39 @@ echo '</div>';
             let keyboard = document.querySelector('.keyboard');
             let keys = document.querySelectorAll('.key');
 
+            // Load colors from localStorage
+            let savedKeyboardColor = localStorage.getItem('keyboardColor');
+            let savedKeyColor = localStorage.getItem('keyColor');
+
+            if (savedKeyboardColor) {
+                keyboard.style.backgroundColor = savedKeyboardColor;
+                keyboardColorInput.value = savedKeyboardColor; // Update the color picker value
+            }
+
+            if (savedKeyColor) {
+                keys.forEach(function(key) {
+                    key.style.backgroundColor = savedKeyColor;
+                });
+                keyColorInput.value = savedKeyColor; // Update the color picker value
+            }
+
+            // Save keyboard color to localStorage
             keyboardColorInput.addEventListener('input', function() {
                 let selectedColor = keyboardColorInput.value;
                 keyboard.style.backgroundColor = selectedColor;
+                localStorage.setItem('keyboardColor', selectedColor);
             });
 
+            // Save key color to localStorage
             keyColorInput.addEventListener('input', function() {
                 let selectedKeyColor = keyColorInput.value;
                 keys.forEach(function(key) {
                     key.style.backgroundColor = selectedKeyColor;
-                    key.style.transition = 'background-color 0.3s ease';
                 });
+                localStorage.setItem('keyColor', selectedKeyColor);
             });
         });
+
 
 
 
