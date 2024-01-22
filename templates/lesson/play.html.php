@@ -47,6 +47,14 @@ echo '</div>';
     <div class="test">
         <div class="keyboard">
             <div class="row">
+                <div class="color-options">
+                    <h2>Keyboard background:</h2>
+                    <input class="keyboard-color-input" type="color">
+                    <h2>Key background color:</h2>
+                    <input class="key-color-input" type="color">
+                </div>
+            </div>
+            <div class="row">
                 <div class="key">`</div>
                 <div class="key">1</div>
                 <div class="key">2</div>
@@ -138,8 +146,7 @@ echo '</div>';
                 this.accuracyResult = 0;
                 this.finalResultLesson = 0;
                 this.isFinished = false;
-                this.isStarted = false;
-                this.firstKeyPress = true; // Add a flag to track the first key press
+
                 this.initializeLesson();
             }
 
@@ -202,7 +209,6 @@ echo '</div>';
             }
 
             validate(isValid) {
-                const characterId = 'character' + this.currentPosition;
                 const containerName = 'container' + this.currentPosition;
                 const characterElement = document.getElementById(containerName);
 
