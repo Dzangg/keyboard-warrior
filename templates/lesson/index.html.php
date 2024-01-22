@@ -67,7 +67,6 @@ ob_start(); ?>
                 let doneLessonsCnt = document.getElementById('done-lessons');
                 let lessonsAccuracy = document.getElementById('lessons-accuracy');
                 let actuallyDone = doneCustomLessons.filter(lesson => lesson.accuracy);
-                console.log(actuallyDone.length)
 
                 doneLessonsCnt.innerText = "Done lessons: " + (doneLessons.length + actuallyDone.length);
                 lessonsAccuracy.innerText = "Average accuracy: " + averageAccuracy.toString().substring(0,5) + "%";
